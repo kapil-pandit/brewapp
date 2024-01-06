@@ -1,15 +1,17 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var bookSchema = new Schema({
+var UserSchema = new Schema({
   name: String,
-  author: String,
-  price: Number,
-  publishedDate: Date,
+  email: String,
+  place: String,
+  department: String,
+  mobile: Number,
+  dob: Date,
   active: { type: Boolean, default: false },
   isDelete: { type: Boolean, default: false },
 },{timestamps:true});
 
 module.exports = {
-  "BookModel": mongoose.model('BookModel', bookSchema)
+  "UserModel": mongoose.model('UserModel', UserSchema)
 }

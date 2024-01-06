@@ -7,7 +7,7 @@ class Routes {
 
     /* creating app Routes starts */
     appRoutes() {
-        this.app.use('/book', trimRequest.all, require("./book"));
+        this.app.use('/user', trimRequest.all, require("./user"));
 
     }
     
