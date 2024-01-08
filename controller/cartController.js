@@ -1,5 +1,5 @@
 const message = require('../config/messages')
-const userProvider = require('../provider/userProvider')
+const cartProvider = require('../provider/cartProvider')
 const axios = require('axios')
 // const console = require('../logger')
 
@@ -50,13 +50,13 @@ return _handleResponse(req, res, null, data);
         return _handleResponse(req, res, e)
     }
 }
-let register = async (req, res) => {
+let add = async (req, res) => {
     try {
-        console.log("******* +++++++++++ API hits...!", req.body);
+        console.log("API hits...!", req.body);
         if (!req.body) {
             return _handleResponse(req, res, message.error.REQ_BODY_EMPTY);
         }
-        let response = await userProvider.registerUser(req.body);
+        let response = await cartProvider.add(req.body);
         return _handleResponse(req, res, null, response);
     } catch (e) {
         console.error("Error ::: ", e);
@@ -70,7 +70,7 @@ let updateUser = async (req, res) => {
             return _handleResponse(req, res, message.error.REQ_BODY_EMPTY);
         }
         // console.log(req.params);
-        let response = await userProvider.updateUser(req.body, req.params.id);
+        let response = await cartProvider.updateUser(req.body, req.params.id);
         return _handleResponse(req, res, null, response);
     } catch (e) {
         console.error("Error ::: ", e);
@@ -78,13 +78,13 @@ let updateUser = async (req, res) => {
     }
 }
 
-let updateUserList = async (req, res) => {
+let updateCartList = async (req, res) => {
     try {
         if (!req.body) {
             return _handleResponse(req, res, message.error.REQ_BODY_EMPTY);
         }
         // console.log(req.params);
-        let response = await userProvider.updateUserList(req.body.data,);
+        let response = await cartProvider.updateCartList(req.body.data,);
         return _handleResponse(req, res, null, response);
     } catch (e) {
         console.error("Error ::: ", e);
@@ -94,7 +94,7 @@ let updateUserList = async (req, res) => {
 
 let getUserDetails = async (req, res) => {
     try {
-        let response = await userProvider.getUserDetails(req.params.id);
+        let response = await cartProvider.getUserDetails(req.params.id);
         return _handleResponse(req, res, null, response);
     } catch (e) {
         console.error("Error  ::: ", e);
@@ -106,7 +106,7 @@ let getUserDetails = async (req, res) => {
 let getUserList = async (req, res) => {
     try {
         console.log(req.query);
-        const response = await userProvider.getUserList(req.query);
+        const response = await cartProvider.getUserList(req.query);
         return _handleResponse(req, res, null, response);
     } catch (e) {
         console.error("Error while changePassword ::: ", e);
@@ -118,7 +118,7 @@ let deleteUser = async (req, res) => {
     try {
         console.log(req.query);
         console.log(req.params);
-        const response = await userProvider.deleteUser(req.params.id);
+        const response = await cartProvider.deleteUser(req.params.id);
         return _handleResponse(req, res, null, response);
     } catch (e) {
         console.error("Error while changePassword ::: ", e);
@@ -130,9 +130,9 @@ let deleteUser = async (req, res) => {
 module.exports = {
     callbackGmail,
     createGmail,
-    register,
+    add,
     updateUser,
-    updateUserList,
+    updateCartList,
     getUserDetails,
     getUserList,
     deleteUser,

@@ -1,13 +1,13 @@
 const dataValidator = require("../helper/dataValidator");
-const { DbHelper } = require("../helper/dbHelper");
+const { DbHelper } = require("../helper/cartDbHelper");
 const { COLLECTIONS } = require("../config/constant");
 
 const dbInstance = new DbHelper();
 
-let registerUser = async (userData) => {
+let add = async (userData) => {
     try {
-        const updateObj = await dataValidator.validateRegisterObj(userData);
-        let updatedBook = await dbInstance.insertDocument(COLLECTIONS.BOOK_COLLECTION_NAME, userData);
+        // const updateObj = await dataValidator.validateRegisterObj(userData);
+        let updatedBook = await dbInstance.insertDocument(COLLECTIONS.CART_COLLECTION_NAME, userData);
         return updatedBook;
     } catch (e) {
         console.error('Error ::: ', e)
@@ -18,7 +18,7 @@ let registerUser = async (userData) => {
 let updateUser = async (userData, id) => {
     try {
         const updateObj = await dataValidator.validateUpdateUserObj(userData);
-        let updatedUser = await dbInstance.updateDocument(COLLECTIONS.BOOK_COLLECTION_NAME, id, updateObj);
+        let updatedUser = await dbInstance.updateDocument(COLLECTIONS.CART_COLLECTION_NAME, id, updateObj);
         return updatedUser;
     } catch (e) {
         console.error('Error ::: ', e)
@@ -26,10 +26,10 @@ let updateUser = async (userData, id) => {
     }
 }
 
-let updateUserList = async (userData,) => {
+let updateCartList = async (userData,) => {
     try {
         // const updateObj = await dataValidator.validateUpdateUserObj(userData);
-        let updatedUser = await dbInstance.updateDocumentList(COLLECTIONS.BOOK_COLLECTION_NAME, userData);
+        let updatedUser = await dbInstance.updateDocumentList(COLLECTIONS.CART_COLLECTION_NAME, userData);
         return updatedUser;
     } catch (e) {
         console.error('Error ::: ', e)
@@ -39,7 +39,7 @@ let updateUserList = async (userData,) => {
 
 let getUserDetails = async (id) => {
     try {
-        const userDetails = await dbInstance.fetchSingleDocument(COLLECTIONS.BOOK_COLLECTION_NAME, id);
+        const userDetails = await dbInstance.fetchSingleDocument(COLLECTIONS.CART_COLLECTION_NAME, id);
         return userDetails;
     } catch (e) {
         console.error('Error ::: ', e)
@@ -54,7 +54,7 @@ let getUserList = async (query) => {
         sorting[sort] = order;
         const skipIndex = (pgNo - 1) * limit;
         console.log(sorting, skipIndex, limit);
-        const bookList = await dbInstance.fetchUserList(COLLECTIONS.BOOK_COLLECTION_NAME, sorting, skipIndex, limit);
+        const bookList = await dbInstance.fetchUserList(COLLECTIONS.CART_COLLECTION_NAME, sorting, skipIndex, limit);
         return bookList;
     } catch (e) {
         console.error('Error ::: ', e)
@@ -64,7 +64,7 @@ let getUserList = async (query) => {
 
 let deleteUser = async (id) => {
     try {
-        const bookList = await dbInstance.deleteDocument(COLLECTIONS.BOOK_COLLECTION_NAME,id);
+        const bookList = await dbInstance.deleteDocument(COLLECTIONS.CART_COLLECTION_NAME,id);
         return bookList;
     } catch (e) {
         console.error('Error ::: ', e)
@@ -73,9 +73,9 @@ let deleteUser = async (id) => {
 }
 
 module.exports = {
-    registerUser,
+    add,
     updateUser,
-    updateUserList,
+    updateCartList,
     getUserDetails,
     getUserList,
     deleteUser,

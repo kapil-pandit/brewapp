@@ -7,6 +7,7 @@ const {jwtCreate, jwtCheck} = require('../utils/jwt')
 
 router.post('/',  userController.register);
 router.put('/:id', userController.updateUser);
+router.put('/', userController.updateUserList);
 router.get('/:id',  userController.getUserDetails);
 router.get('/',  userController.getUserList);
 router.delete('/:id',  userController.deleteUser);

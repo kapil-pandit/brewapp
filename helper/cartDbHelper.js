@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
-const { UserModel } = require("../schema/user");
 const console = require("../logger");
 const { COLLECTIONS } = require("../config/constant");
 const messages = require("../config/messages");
+const { CartModel } = require("../schema/cart");
 
 class DbHelper {
   async connect() {
@@ -25,8 +25,8 @@ class DbHelper {
   async fetchSingleDocument(collection, _id) {
     try {
       let Model;
-      if (collection == COLLECTIONS.BOOK_COLLECTION_NAME) {
-        Model = UserModel;
+      if (collection == COLLECTIONS.CART_COLLECTION_NAME) {
+        Model = CartModel;
       } else {
         throw Error(messages.error.INVALID_COLLECTION);
       }
@@ -55,8 +55,8 @@ class DbHelper {
         );
       }
       let modelInstance;
-      if (collection == COLLECTIONS.BOOK_COLLECTION_NAME) {
-        modelInstance = new UserModel(docObj);
+      if (collection == COLLECTIONS.CART_COLLECTION_NAME) {
+        modelInstance = new CartModel(docObj);
       } else {
         throw Error(messages.error.INVALID_COLLECTION);
       }
@@ -74,8 +74,8 @@ class DbHelper {
   async updateDocument(collection, _id, data) {
     try {
       let Model;
-      if (collection == COLLECTIONS.BOOK_COLLECTION_NAME) {
-        Model = UserModel;
+      if (collection == COLLECTIONS.CART_COLLECTION_NAME) {
+        Model = CartModel;
       } else {
         throw Error(messages.error.INVALID_COLLECTION);
       }
@@ -98,37 +98,42 @@ class DbHelper {
 
   async updateDocumentList(collection, data) {
     try {
-      console.log(":::: DATA ::::", data);
+      
+        console.log(":::: DATA ::::", data);
       let Model;
-      if (collection == COLLECTIONS.BOOK_COLLECTION_NAME) {
-        Model = UserModel;
+      if (collection == COLLECTIONS.CART_COLLECTION_NAME) {
+        Model = CartModel;
       } else {
         throw Error(messages.error.INVALID_COLLECTION);
       }
       await this.connect();
-      for (let index = 0; index < data.length; index++) {
-        const element = data[index];
-        const exist = await Model.findOne({
-          _id: mongoose.Types.ObjectId(element._id),
-          isDelete: { $ne: true },
-        });
-        if (!exist) return "This Book is not available";
-        delete element._id;
-        delete element.id;
-        const obj = {
-          department: element.department,
-          place: element.place,
-          name: element.name,
-          email: element.email,
-          mobile: element.mobile,
-        };
-        await Model.findOneAndUpdate(
-          { _id: mongoose.Types.ObjectId(exist._id) },
-          obj,
-          { new: true }
-        );
+      if (data?.length>0) {
+        for (let index = 0; index < data.length; index++) {
+            const element = data[index];
+            const exist = await Model.findOne({
+              _id: mongoose.Types.ObjectId(element._id),
+              isDelete: { $ne: true },
+            });
+            if (!exist) return "This Book is not available";
+            delete element._id;
+            delete element.id;
+            const obj = {
+              name: element.name,
+              title: element.title,
+              quantity: element.quantity,
+              totalPrice: element.totalPrice,
+              description: element.description,
+            };
+            await Model.findOneAndUpdate(
+              { _id: mongoose.Types.ObjectId(exist._id) },
+              obj,
+              { new: true }
+            );
+          }
+          return "Success";
+      } else {
+        return "Failed";
       }
-      return "success";
     } catch (e) {
       console.error("DbHelper Error ::: ", e);
       throw e;
@@ -138,8 +143,8 @@ class DbHelper {
   async fetchUserList(collection, sorting, skipIndex, limit) {
     try {
       let Model;
-      if (collection == COLLECTIONS.BOOK_COLLECTION_NAME) {
-        Model = UserModel;
+      if (collection == COLLECTIONS.CART_COLLECTION_NAME) {
+        Model = CartModel;
       } else {
         throw Error(messages.error.INVALID_COLLECTION);
       }
@@ -158,8 +163,8 @@ class DbHelper {
   async deleteDocument(collection, _id) {
     try {
       let Model;
-      if (collection == COLLECTIONS.BOOK_COLLECTION_NAME) {
-        Model = UserModel;
+      if (collection == COLLECTIONS.CART_COLLECTION_NAME) {
+        Model = CartModel;
       } else {
         throw Error(messages.error.INVALID_COLLECTION);
       }
@@ -169,7 +174,7 @@ class DbHelper {
         isDelete: { $ne: true },
       });
       if (!exist) return "This Book is not available";
-      let bookData = await UserModel.findByIdAndUpdate(
+      let bookData = await CartModel.findByIdAndUpdate(
         { _id: _id },
         { $set: { isDelete: true } },
         { new: true }
