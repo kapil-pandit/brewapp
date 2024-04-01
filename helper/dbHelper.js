@@ -112,7 +112,7 @@ class DbHelper {
           _id: mongoose.Types.ObjectId(element._id),
           isDelete: { $ne: true },
         });
-        if (!exist) return "This Book is not available";
+        if (!exist) return "This Book is not available here";
         delete element._id;
         delete element.id;
         const obj = {
