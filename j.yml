@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout the code from the Git repository
+                git branch: 'dev', url: 'https://github.com/your/repository.git'
+            }
+        }
+        
+        stage('Install Dependencies') {
+            steps {
+                // Install Node.js dependencies
+                sh 'npm install'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                // Build your Node.js project
+                sh 'npm run build'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                // Run tests
+                sh 'npm test'
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                // Deploy the application (example)
+                // This could be deploying to a server, pushing to a registry, etc.
+                sh 'npm run deploy'
+            }
+        }
+    }
+    
+    post {
+        // Clean up steps
+        always {
+            // Cleanup steps like archiving artifacts, sending notifications, etc.
+            echo 'Performing cleanup...'
+        }
+    }
+}
