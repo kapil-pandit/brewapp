@@ -128,7 +128,7 @@ class DbHelper {
           { new: true }
         );
       }
-      return "success";
+      return "successfull";
     } catch (e) {
       console.error("DbHelper Error ::: ", e);
       throw e;
