@@ -4,7 +4,7 @@ global._handleResponse = function (req, res, err, response) {
         return res.status(err.statusCode || 400).json({
             status: 'error',
             ok: false,
-            code: err.code || "BadRequest",
+            code: err.code || 400,
             message: err.message || err,
             result: ""
         })

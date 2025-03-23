@@ -39,6 +39,23 @@ module.exports = {
         }
         return updateFields;
     },
+
+    validateverifyOtp: async function (dataObj) {
+        let {otp,} = dataObj
+
+        const v = new Validator(dataObj, {
+            otp: 'integer|required|minLength:6|maxLength:6'
+        });
+        let matched = await v.check();
+        if (!matched) {
+            throw (v.errors)
+        }
+
+        const updateFields = {
+            otp,
+        }
+        return updateFields;
+    },
     validateLoginObj: async function (dataObj) {
         let { password, email,} = dataObj
 

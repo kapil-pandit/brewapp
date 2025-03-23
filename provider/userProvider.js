@@ -24,11 +24,10 @@ let sendotp = async (userData) => {
       userData
     );
     // console.log("::::: user :::::::", user);
-    if (typeof user !== "object") return Error("User not exist");
+    if (typeof user !== "object") throw new Error("Register First");
 
     const timestamp = Date.now().toString(); // Get current timestamp
     const otp = timestamp.slice(-6);
-    console.log(timestamp, otp);
     let expirydate = Number(timestamp)+ 300000;
     let updatedBook = await dbInstance.updateDocument(
       COLLECTIONS.USER_COLLECTION_NAME,
@@ -47,7 +46,33 @@ let sendotp = async (userData) => {
 } catch (error) {
     console.error('Error sending OTP:', error.response?.body || error.message);
 }
-    return updatedBook;
+    return otp;
+  } catch (e) {
+    console.error("Error ::: ", e);
+    throw e;
+  }
+};
+
+let verifyotp = async (userData) => {
+  try {
+    // sgMail.setApiKey(process.env.SEND_GRID_KEY)
+    await dataValidator.validateverifyOtp(userData);
+    const user = await dbInstance.findUSerByOtp(
+      COLLECTIONS.USER_COLLECTION_NAME,
+      userData
+    );
+    // console.log("::::: user :::::::", user);
+    if (typeof user !== "object") throw new Error("Invalid OTP");
+
+    const timestamp = Date.now().toString(); // Get current timestamp
+    console.log(timestamp);
+    let expirydate = Number(timestamp)- 300000;
+    if(user.otpExpiry <= expirydate) throw new Error("OTP Expired");
+    await dbInstance.updateDocument(
+      COLLECTIONS.USER_COLLECTION_NAME,
+      user._id, {otp : "", otpExpiry:"", active:true}
+    );
+    return "Please Login";
   } catch (e) {
     console.error("Error ::: ", e);
     throw e;
@@ -61,13 +86,14 @@ let registerUser = async (userData) => {
       COLLECTIONS.USER_COLLECTION_NAME,
       userData
     );
-    console.log("::::: user :::::::", user);
-    if (typeof user === "object") return Error("User already exist");
-    let updatedBook = await dbInstance.insertDocument(
+    // console.log("::::: user :::::::", user);
+    if (typeof user === "object") throw new Error("User already exist");
+    
+    let insertedUser = await dbInstance.insertDocument(
       COLLECTIONS.USER_COLLECTION_NAME,
       updateObj
     );
-    return updatedBook;
+    return insertedUser;
   } catch (e) {
     console.error("Error ::: ", e);
     throw e;
@@ -179,6 +205,7 @@ let deleteUser = async (id) => {
 module.exports = {
   registerUser,
   sendotp,
+  verifyotp,
   loginUser,
   updateUser,
   updateUserList,
