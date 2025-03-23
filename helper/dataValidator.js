@@ -56,6 +56,23 @@ module.exports = {
         }
         return updateFields;
     },
+
+    validateverifypassword: async function (dataObj) {
+        let {password,} = dataObj
+
+        const v = new Validator(dataObj, {
+            password: 'string|required|minLength:8|maxLength:16'
+        });
+        let matched = await v.check();
+        if (!matched) {
+            throw (v.errors)
+        }
+
+        const updateFields = {
+            password,
+        }
+        return updateFields;
+    },
     validateLoginObj: async function (dataObj) {
         let { password, email,} = dataObj
 

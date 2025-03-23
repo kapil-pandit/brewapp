@@ -8,6 +8,7 @@ const {jwtCreate, jwtCheck} = require('../utils/jwt')
 router.post('/register',  userController.register);
 router.post('/sendotp',  userController.sendotp);
 router.post('/verifyotp',  userController.verifyotp);
+router.post('/passwordSet',  userController.passwordSet);
 router.post('/login',  userController.login);
 router.put('/:id', userController.updateUser);
 router.put('/', userController.updateUserList);

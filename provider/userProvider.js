@@ -68,16 +68,49 @@ let verifyotp = async (userData) => {
     console.log(timestamp);
     let expirydate = Number(timestamp)- 300000;
     if(user.otpExpiry <= expirydate) throw new Error("OTP Expired");
-    await dbInstance.updateDocument(
-      COLLECTIONS.USER_COLLECTION_NAME,
-      user._id, {otp : "", otpExpiry:"", active:true}
-    );
-    return "Please Login";
+    // await dbInstance.updateDocument(
+    //   COLLECTIONS.USER_COLLECTION_NAME,
+    //   user._id, {otp : "", otpExpiry:"", active:true}
+    // );
+    return "Please set your password";
   } catch (e) {
     console.error("Error ::: ", e);
     throw e;
   }
 };
+
+async function hashPassword(plainPassword) {
+  const saltRounds = 10;
+  return await bcrypt.hash(plainPassword, saltRounds);
+}
+
+let passwordSet = async (userData) => {
+  try {
+    // sgMail.setApiKey(process.env.SEND_GRID_KEY)
+    await dataValidator.validateverifypassword(userData);
+    const user = await dbInstance.findUSerByOtp(
+      COLLECTIONS.USER_COLLECTION_NAME,
+      userData
+    );
+    // console.log("::::: user :::::::", user);
+    if (typeof user !== "object") throw new Error("Invalid OTP");
+    const hash = await hashPassword(userData.password)
+    const timestamp = Date.now().toString(); // Get current timestamp
+    console.log(timestamp);
+    let expirydate = Number(timestamp)- 300000;
+    if(user.otpExpiry <= expirydate) throw new Error("OTP Expired");
+    await dbInstance.updateDocument(
+      COLLECTIONS.USER_COLLECTION_NAME,
+      user._id, {otp : "", otpExpiry:"", active:true, password:hash}
+    );
+    return "Please Login..!";
+  } catch (e) {
+    console.error("Error ::: ", e);
+    throw e;
+  }
+};
+
+
 
 let registerUser = async (userData) => {
   try {
@@ -104,7 +137,7 @@ let loginUser = async (userData) => {
   try {
     await dataValidator.validateLoginObj(userData);
     let userDoc = await dbInstance.findUSer(
-      COLLECTIONS.BOOK_COLLECTION_NAME,
+      COLLECTIONS.USER_COLLECTION_NAME,
       userData
     );
     // let updatedBook = await dbInstance.insertDocument(COLLECTIONS.BOOK_COLLECTION_NAME, userData);
@@ -206,6 +239,7 @@ module.exports = {
   registerUser,
   sendotp,
   verifyotp,
+  passwordSet,
   loginUser,
   updateUser,
   updateUserList,

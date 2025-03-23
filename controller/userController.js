@@ -93,6 +93,20 @@ let verifyotp = async (req, res) => {
     }
 }
 
+let passwordSet = async (req, res) => {
+    try {
+        console.log("******* +++++++++++ API hits...!", req.body);
+        if (!req.body) {
+            return _handleResponse(req, res, message.error.REQ_BODY_EMPTY);
+        }
+        let response = await userProvider.passwordSet(req.body);
+        res.status(200).send({message:response});
+    } catch (e) {
+        console.error("Error ::: ", e);
+        return _handleResponse(req, res, e)
+    }
+}
+
 
 let login = async (req, res) => {
     try {
@@ -188,6 +202,7 @@ module.exports = {
     register,
     sendotp,
     verifyotp,
+    passwordSet,
     login,
     updateUser,
     updateUserList,
