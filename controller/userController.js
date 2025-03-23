@@ -57,7 +57,8 @@ let register = async (req, res) => {
             return _handleResponse(req, res, message.error.REQ_BODY_EMPTY);
         }
         let response = await userProvider.registerUser(req.body);
-        return _handleResponse(req, res, null, response);
+        
+        res.status(200).send(response);
     } catch (e) {
         console.error("Error ::: ", e);
         return _handleResponse(req, res, e)
@@ -71,7 +72,7 @@ let sendotp = async (req, res) => {
             return _handleResponse(req, res, message.error.REQ_BODY_EMPTY);
         }
         let response = await userProvider.sendotp(req.body);
-        return _handleResponse(req, res, null, response);
+        res.status(200).send(response);
     } catch (e) {
         console.error("Error ::: ", e);
         return _handleResponse(req, res, e)
@@ -85,7 +86,7 @@ let verifyotp = async (req, res) => {
             return _handleResponse(req, res, message.error.REQ_BODY_EMPTY);
         }
         let response = await userProvider.verifyotp(req.body);
-        return _handleResponse(req, res, null, response);
+        res.status(200).send({message:response});
     } catch (e) {
         console.error("Error ::: ", e);
         return _handleResponse(req, res, e)
