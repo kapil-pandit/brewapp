@@ -144,12 +144,12 @@ let loginUser = async (userData) => {
     // Compare passwords
     console.log(":::::userDoc::::", userDoc);
     if (!userDoc._id) {
-      throw "Invalid credentials";
+      throw "Invalid Email";
     }
     const isMatch = await bcrypt.compare(userData.password, userDoc.password);
     console.log(":::::isMatch::::", isMatch);
 
-    if (!isMatch) return { message: "Invalid credentials" };
+    if (!isMatch) return { message: "Invalid password" };
     // console.log(":::::userDoc::::", userDoc);
     const token = generateToken(userDoc._id);
     userDoc.jwt = token;
@@ -189,18 +189,18 @@ let updateUserList = async (userData) => {
   }
 };
 
-let getUserDetails = async (id) => {
-  try {
-    const userDetails = await dbInstance.fetchSingleDocument(
-      COLLECTIONS.BOOK_COLLECTION_NAME,
-      id
-    );
-    return userDetails;
-  } catch (e) {
-    console.error("Error ::: ", e);
-    throw e;
-  }
-};
+// let getUserDetails = async (id) => {
+//   try {
+//     const userDetails = await dbInstance.fetchSingleDocument(
+//       COLLECTIONS.BOOK_COLLECTION_NAME,
+//       id
+//     );
+//     return userDetails;
+//   } catch (e) {
+//     console.error("Error ::: ", e);
+//     throw e;
+//   }
+// };
 
 let getUserList = async (query) => {
   try {
@@ -243,7 +243,6 @@ module.exports = {
   loginUser,
   updateUser,
   updateUserList,
-  getUserDetails,
   getUserList,
   deleteUser,
 };

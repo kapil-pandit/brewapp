@@ -22,29 +22,29 @@ class DbHelper {
     }
   }
 
-  async fetchSingleDocument(collection, _id) {
-    try {
-      let Model;
-      if (collection == COLLECTIONS.USER_COLLECTION_NAME) {
-        Model = UserModel;
-      } else {
-        throw Error(messages.error.INVALID_COLLECTION);
-      }
-      await this.connect();
-      const exist = await Model.findOne({
-        _id: mongoose.Types.ObjectId(_id),
-        isDelete: { $ne: true },
-      });
-      if (!exist) return "This Book is not available";
-      return await Model.findById({ _id: mongoose.Types.ObjectId(_id) });
-    } catch (e) {
-      console.error(
-        "DbHelper mongoClient.insertDocumentWithIndex: Error caught,",
-        e
-      );
-      throw Error(e);
-    }
-  }
+  // async fetchSingleDocument(collection, _id) {
+  //   try {
+  //     let Model;
+  //     if (collection == COLLECTIONS.USER_COLLECTION_NAME) {
+  //       Model = UserModel;
+  //     } else {
+  //       throw Error(messages.error.INVALID_COLLECTION);
+  //     }
+  //     await this.connect();
+  //     const exist = await Model.findOne({
+  //       _id: mongoose.Types.ObjectId(_id),
+  //       isDelete: { $ne: true },
+  //     });
+  //     if (!exist) return "This Book is not available";
+  //     return await Model.findById({ _id: mongoose.Types.ObjectId(_id) });
+  //   } catch (e) {
+  //     console.error(
+  //       "DbHelper mongoClient.insertDocumentWithIndex: Error caught,",
+  //       e
+  //     );
+  //     throw Error(e);
+  //   }
+  // }
 
   async findUSer(collection, doc) {
     try {
