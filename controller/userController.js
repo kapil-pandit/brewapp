@@ -78,6 +78,21 @@ let sendotp = async (req, res) => {
     }
 }
 
+let verifyotp = async (req, res) => {
+    try {
+        console.log("******* +++++++++++ API hits...!", req.body);
+        if (!req.body) {
+            return _handleResponse(req, res, message.error.REQ_BODY_EMPTY);
+        }
+        let response = await userProvider.verifyotp(req.body);
+        return _handleResponse(req, res, null, response);
+    } catch (e) {
+        console.error("Error ::: ", e);
+        return _handleResponse(req, res, e)
+    }
+}
+
+
 let login = async (req, res) => {
     try {
         console.log("******* +++++++++++ API hits...!", req.body);
@@ -171,6 +186,7 @@ module.exports = {
     createGmail,
     register,
     sendotp,
+    verifyotp,
     login,
     updateUser,
     updateUserList,

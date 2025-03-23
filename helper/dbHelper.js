@@ -72,6 +72,31 @@ class DbHelper {
     }
   }
 
+  async findUSerByOtp(collection, doc) {
+    try {
+      let Model;
+      if (collection == COLLECTIONS.USER_COLLECTION_NAME) {
+        Model = UserModel;
+      } else {
+        throw Error(messages.error.INVALID_COLLECTION);
+      }
+      await this.connect();
+      const exist = await Model.findOne({
+        otp: doc.otp,
+        isDelete: { $ne: true },
+      });
+      if (!exist) return "This user is not available";
+      
+      return await Model.findOne({otp: doc.otp,});
+    } catch (e) {
+      console.error(
+        "DbHelper mongoClient.insertDocumentWithIndex: Error caught,",
+        e
+      );
+      throw Error(e);
+    }
+  }
+
   async insertDocument(collection, docObj) {
     try {
       console.log("::::: docObj ::::::", docObj);
