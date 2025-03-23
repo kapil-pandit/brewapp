@@ -3,15 +3,15 @@ const message = require('../config/messages');
 
 module.exports = {
     validateRegisterObj: async function (dataObj) {
-        let { name, email, mobile, department, place, dob} = dataObj
+        let { firstName, lastName, email, mobile,  gender, dob} = dataObj
 
         const v = new Validator(dataObj, {
-            name: 'string|required',
+            firstName: 'string|required',
+            lastName: 'string|required',
             email: 'email|required',
-            department: 'string',
-            place: 'string',
+            gender: 'string',
             dob: 'date',
-            mobile: 'integer|required|minLength:1'
+            mobile: 'integer|required|minLength:10|maxLength:10'
         });
         let matched = await v.check();
         if (!matched) {
@@ -19,7 +19,44 @@ module.exports = {
         }
 
         const updateFields = {
-            name, email, mobile, department, place, dob
+            firstName, lastName, email, mobile,  gender, dob
+        }
+        return updateFields;
+    },
+    validateSendOtp: async function (dataObj) {
+        let { email,} = dataObj
+
+        const v = new Validator(dataObj, {
+            email: 'email',
+        });
+        let matched = await v.check();
+        if (!matched) {
+            throw (v.errors)
+        }
+
+        const updateFields = {
+            email,
+        }
+        return updateFields;
+    },
+    validateLoginObj: async function (dataObj) {
+        let { password, email,} = dataObj
+
+        const v = new Validator(dataObj, {
+            email: 'email|required',
+            password: 'string|required',
+            // department: 'string',
+            // place: 'string',
+            // dob: 'date',
+            // mobile: 'integer|required|minLength:1'
+        });
+        let matched = await v.check();
+        if (!matched) {
+            throw (v.errors)
+        }
+
+        const updateFields = {
+            email, password
         }
         return updateFields;
     },
