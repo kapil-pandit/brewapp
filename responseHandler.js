@@ -15,5 +15,6 @@ global._handleResponse = function (req, res, err, response) {
         code: 200,
         message: '',
         result: response,
+        
     })
 };

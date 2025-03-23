@@ -8,7 +8,7 @@ class Routes {
     /* creating app Routes starts */
     appRoutes() {
         this.app.use('/user', trimRequest.all, require("./user"));
-        this.app.use('/cart', trimRequest.all, require("./cart"));
+        this.app.use('/api/cart', trimRequest.all, require("./cart"));
 
     }
     

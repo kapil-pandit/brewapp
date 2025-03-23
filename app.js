@@ -36,7 +36,7 @@ class Server {
         this.appConfig();
         this.includeRoutes();
 
-        const port = process.env.NODE_SERVER_PORT || 3000;
+        const port = process.env.NODE_SERVER_PORT || 3001;
         const host = process.env.NODE_SERVER_HOST || '0.0.0.0';
 
         this.http.listen(port, host, () => {

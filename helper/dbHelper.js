@@ -25,7 +25,7 @@ class DbHelper {
   async fetchSingleDocument(collection, _id) {
     try {
       let Model;
-      if (collection == COLLECTIONS.BOOK_COLLECTION_NAME) {
+      if (collection == COLLECTIONS.USER_COLLECTION_NAME) {
         Model = UserModel;
       } else {
         throw Error(messages.error.INVALID_COLLECTION);
@@ -46,6 +46,32 @@ class DbHelper {
     }
   }
 
+  async findUSer(collection, doc) {
+    try {
+      let Model;
+      if (collection == COLLECTIONS.USER_COLLECTION_NAME) {
+        Model = UserModel;
+      } else {
+        throw Error(messages.error.INVALID_COLLECTION);
+      }
+      await this.connect();
+      const exist = await Model.findOne({
+        email: doc.email,
+        isDelete: { $ne: true },
+      });
+      if (!exist) return "This user is not available";
+      console.log(":::: exist ::::", doc.email, exist);
+      
+      return await Model.findOne({email: doc.email,});
+    } catch (e) {
+      console.error(
+        "DbHelper mongoClient.insertDocumentWithIndex: Error caught,",
+        e
+      );
+      throw Error(e);
+    }
+  }
+
   async insertDocument(collection, docObj) {
     try {
       console.log("::::: docObj ::::::", docObj);
@@ -55,7 +81,7 @@ class DbHelper {
         );
       }
       let modelInstance;
-      if (collection == COLLECTIONS.BOOK_COLLECTION_NAME) {
+      if (collection == COLLECTIONS.USER_COLLECTION_NAME) {
         modelInstance = new UserModel(docObj);
       } else {
         throw Error(messages.error.INVALID_COLLECTION);
@@ -74,7 +100,7 @@ class DbHelper {
   async updateDocument(collection, _id, data) {
     try {
       let Model;
-      if (collection == COLLECTIONS.BOOK_COLLECTION_NAME) {
+      if (collection == COLLECTIONS.USER_COLLECTION_NAME) {
         Model = UserModel;
       } else {
         throw Error(messages.error.INVALID_COLLECTION);
@@ -84,7 +110,7 @@ class DbHelper {
         _id: mongoose.Types.ObjectId(_id),
         isDelete: { $ne: true },
       });
-      if (!exist) return "This Book is not available";
+      if (!exist) return "This User is not available";
       return await Model.findOneAndUpdate(
         { _id: mongoose.Types.ObjectId(_id) },
         data,
@@ -100,7 +126,7 @@ class DbHelper {
     try {
       console.log(":::: DATA ::::", data);
       let Model;
-      if (collection == COLLECTIONS.BOOK_COLLECTION_NAME) {
+      if (collection == COLLECTIONS.USER_COLLECTION_NAME) {
         Model = UserModel;
       } else {
         throw Error(messages.error.INVALID_COLLECTION);
@@ -138,7 +164,7 @@ class DbHelper {
   async fetchUserList(collection, sorting, skipIndex, limit) {
     try {
       let Model;
-      if (collection == COLLECTIONS.BOOK_COLLECTION_NAME) {
+      if (collection == COLLECTIONS.USER_COLLECTION_NAME) {
         Model = UserModel;
       } else {
         throw Error(messages.error.INVALID_COLLECTION);
@@ -158,7 +184,7 @@ class DbHelper {
   async deleteDocument(collection, _id) {
     try {
       let Model;
-      if (collection == COLLECTIONS.BOOK_COLLECTION_NAME) {
+      if (collection == COLLECTIONS.USER_COLLECTION_NAME) {
         Model = UserModel;
       } else {
         throw Error(messages.error.INVALID_COLLECTION);

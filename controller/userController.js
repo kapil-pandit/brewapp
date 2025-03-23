@@ -64,6 +64,35 @@ let register = async (req, res) => {
     }
 }
 
+let sendotp = async (req, res) => {
+    try {
+        console.log("******* +++++++++++ API hits...!", req.body);
+        if (!req.body) {
+            return _handleResponse(req, res, message.error.REQ_BODY_EMPTY);
+        }
+        let response = await userProvider.sendotp(req.body);
+        return _handleResponse(req, res, null, response);
+    } catch (e) {
+        console.error("Error ::: ", e);
+        return _handleResponse(req, res, e)
+    }
+}
+
+let login = async (req, res) => {
+    try {
+        console.log("******* +++++++++++ API hits...!", req.body);
+        if (!req.body) {
+            return _handleResponse(req, res, message.error.REQ_BODY_EMPTY);
+        }
+        let response = await userProvider.loginUser(req.body);
+        // response.set('Authorization', `Bearer ${response.jwt}`);
+        return _handleResponse(req, res, null, response);
+    } catch (e) {
+        console.error("Error ::: ", e);
+        return _handleResponse(req, res, e)
+    }
+}
+
 let updateUser = async (req, res) => {
     try {
         if (!req.body) {
@@ -126,14 +155,27 @@ let deleteUser = async (req, res) => {
     }
 }
 
+let testapi = async (req, res) => {
+    try {
+        const data = "This is from jenkins"
+        return _handleResponse(req, res, null, data);
+    } catch (e) {
+        console.error("Error while changePassword ::: ", e);
+        return _handleResponse(req, res, e)
+    }
+}
+
 
 module.exports = {
     callbackGmail,
     createGmail,
     register,
+    sendotp,
+    login,
     updateUser,
     updateUserList,
     getUserDetails,
     getUserList,
     deleteUser,
+    testapi,
 }

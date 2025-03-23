@@ -1,17 +1,22 @@
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
-var UserSchema = new Schema({
-  name: String,
-  email: String,
-  place: String,
-  department: String,
-  mobile: Number,
-  dob: Date,
-  active: { type: Boolean, default: false },
-  isDelete: { type: Boolean, default: false },
-},{timestamps:true});
+var UserSchema = new Schema(
+  {
+    firstName: String,
+    lastName: String,
+    email: String,
+    gender: String,
+    mobile: Number,
+    dob: Date,
+    otp:Number,
+    otpExpiry:Number,
+    active: { type: Boolean, default: false },
+    isDelete: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+);
 
 module.exports = {
-  "UserModel": mongoose.model('UserModel', UserSchema)
-}
+  UserModel: mongoose.model("UserModel", UserSchema),
+};
